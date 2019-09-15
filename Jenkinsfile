@@ -38,13 +38,16 @@ pipeline {
         
        }
     }
-    stage("Snapshot deployement") {
+    stage("Nexus deployement") {
       steps {
           sh './mvnw -Pnexus deploy'
         
        }
     }
     stage('Validation métier') {
+      when {
+        branch 'master'
+      }
       agent none     
        input {
           message "Déploiement en prod ?"
@@ -54,11 +57,8 @@ pipeline {
           }
         }
       steps {
-        echo "Echo, let's go to prod"
-      }
-    }
-    stage('Déploiement') {
-     steps {
+        sh './mvnw release:prepare release:perform -B'
+        sh 'git push origin --tags'
         unstash 'appli'  
         script {
           if ( params.DATA_CENTER == 'Paris') {
@@ -66,9 +66,9 @@ pipeline {
           } else {
             sh 'cp application/target/*.jar /home/dthibau/Formations/MavenJenkins/MyWork/Serveur/Bruxelles.jar'
           }
-        }
-     }
-    } 
+      }
+    }
  }           
+}
 }
  
