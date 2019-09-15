@@ -13,14 +13,7 @@ pipeline {
     
     
     stage('Parallel Stage') {
-      when {
-        not {
-          allOf {
-            branch 'master'
-          }
-        }
-        beforeAgent true
-      }
+    
       parallel {
         stage('Integration tests') {
           agent any
@@ -32,7 +25,7 @@ pipeline {
           agent any
           steps {  
             withSonarQubeEnv('Local-SonarQube') {
-                sh 'mvn clean verify sonar:sonar'
+                sh './mvnw clean verify sonar:sonar'
              }
           }
         }
@@ -42,6 +35,12 @@ pipeline {
       steps {
           sleep(10)
           waitForQualityGate abortPipeline: true
+        
+       }
+    }
+    stage("Snapshot deployement") {
+      steps {
+          sh './mvnw -Pnexus deploy'
         
        }
     }
