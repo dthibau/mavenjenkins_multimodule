@@ -57,7 +57,7 @@ pipeline {
           }
         }
       steps {
-        sh './mvnw release:prepare release:perform -B'
+        sh './mvnw release:clean release:prepare release:perform -B'
         sh 'git push origin --tags'
         unstash 'appli'  
         script {
