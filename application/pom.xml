@@ -13,6 +13,11 @@
     </parent>
     <build>
         <resources>
+              <resource>
+                <directory>${basedir}/src/main/resources</directory>
+      </resource>
+
+
             <resource>
                 <directory>${basedir}/src/main/docker</directory>
                 <includes>
@@ -52,9 +57,6 @@
         </dependency>
     </dependencies>
 
-        <directory>${basedir}/src/main/resources</directory>
-      </resource>
-      <resource>
 
     <profiles>
         <profile>
